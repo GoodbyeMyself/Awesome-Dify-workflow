@@ -1,0 +1,361 @@
+app:
+  description: web 搜索扩展总结内容
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: workflow
+  name: 发起 Web 搜索并总结
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/tongyi:0.0.18@ca40ec06ff35ca611fa5fdf99a15eeb007a9fe3bd725c9ff6d0436469ab0edc9
+    version: null
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/moonshot:0.0.8@39b2074f0d4dd3a739eae2e6b8825ee8c7bc0b4ebda817decafe1d368c84fae2
+    version: null
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/duckduckgo:0.0.5@c9b06a2d34fa61eee0bb0977253e5969ab9b84744fbe78f457da623cdd7f8a3e
+    version: null
+kind: app
+version: 0.4.0
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: llm
+      id: 1724225358355-source-1724225382322-target
+      source: '1724225358355'
+      sourceHandle: source
+      target: '1724225382322'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 1724228790371-source-1724227013944-target
+      source: '1724228790371'
+      sourceHandle: source
+      target: '1724227013944'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: tool
+      id: 1724225382322-source-1724228514957-target
+      source: '1724225382322'
+      sourceHandle: source
+      target: '1724228514957'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: tool
+        targetType: code
+      id: 1724228514957-source-1724230114999-target
+      source: '1724228514957'
+      sourceHandle: source
+      target: '1724230114999'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: llm
+      id: 1724230114999-source-1724228790371-target
+      source: '1724230114999'
+      sourceHandle: source
+      target: '1724228790371'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 开始
+        type: start
+        variables:
+        - label: 用户输入要查询的文本
+          max_length: null
+          options: []
+          required: true
+          type: text-input
+          variable: user_input_text
+      height: 88
+      id: '1724225358355'
+      position:
+        x: 30
+        y: 258
+      positionAbsolute:
+        x: 30
+        y: 258
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params: {}
+          mode: chat
+          name: deepseek-r1
+          provider: langgenius/tongyi/tongyi
+        prompt_template:
+        - id: d51d70e4-0437-47bb-99e3-968b2589e931
+          role: system
+          text: '【正文】：{{#1724225358355.user_input_text#}}
+
+
+            ## 行为
+
+            - 从【正文】中找到三个相关联的【核心关键词】，用于搜索和拓展更多信息
+
+            - 将【核心关键词】用+号拼接
+
+            - 输出拼接后的【核心关键词】
+
+
+            ## 注意事项
+
+            - 输出结果只有【核心关键词】
+
+            - 当【正文】中出现人名时，【核心关键词】中必须包含人名
+
+
+            ## 示例
+
+            【正文】：美国总统胡佛
+
+            【核心关键词】：美国+胡佛+总统
+
+            '
+        selected: false
+        title: 概括关键词主要内容
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 88
+      id: '1724225382322'
+      position:
+        x: 334
+        y: 258
+      positionAbsolute:
+        x: 334
+        y: 258
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        desc: ''
+        provider_id: duckduckgo
+        provider_name: duckduckgo
+        provider_type: builtin
+        selected: true
+        title: 调用duckduckgo搜索
+        tool_configurations:
+          max_results:
+            type: constant
+            value: 100
+          require_summary:
+            type: constant
+            value: 0
+        tool_label: DuckDuckGo 搜索
+        tool_name: ddgo_search
+        tool_node_version: '2'
+        tool_parameters:
+          query:
+            type: mixed
+            value: '{{#1724225382322.text#}}'
+        type: tool
+      height: 114
+      id: '1724228514957'
+      position:
+        x: 638
+        y: 258
+      positionAbsolute:
+        x: 638
+        y: 258
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        desc: ''
+        outputs:
+        - value_selector:
+          - '1724228790371'
+          - text
+          variable: final_result
+        selected: false
+        title: 结束
+        type: end
+      height: 88
+      id: '1724227013944'
+      position:
+        x: 1550
+        y: 258
+      positionAbsolute:
+        x: 1550
+        y: 258
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: moonshot-v1-128k
+          provider: langgenius/moonshot/moonshot
+        prompt_template:
+        - edition_type: basic
+          id: f625c846-e5cd-42a7-8793-460b12384654
+          role: system
+          text: '【数据】：{{#1724230114999.result#}}
+
+
+            ## 行为
+
+            - 忽略无效和边缘信息，用300-500字中文总结【数据】里的【核心信息】，并备注参考【链接】来源，一步步思考后以markdown格式输出
+
+            - 输出分为两部分，上半部分为【核心信息】，下半部分为【链接】
+
+
+            ## 注意事项
+
+            - 【数据】中有【标题】、【链接】和【内容】，参考链接来源必须包含【标题】和【链接】
+
+            '
+        selected: false
+        title: 总结json搜索结果的信息
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 94
+      id: '1724228790371'
+      position:
+        x: 1246
+        y: 258
+      positionAbsolute:
+        x: 1246
+        y: 258
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        code: "import json\n\ndef extract_json_fields(data):\n    extracted_data =\
+          \ []\n    for item in data:\n        extracted_item = {\n            'title':\
+          \ item.get('title', ''),\n            'href': item.get('href', ''),\n  \
+          \          'body': item.get('body', '')\n        }\n        extracted_data.append(extracted_item)\n\
+          \    \n    return extracted_data\n\ndef main(arg1):\n    result = extract_json_fields(arg1)\n\
+          \    \n    output = []\n    for item in result:\n        output.append(f\"\
+          标题: {item['title']}\")\n        output.append(f\"链接: {item['href']}\")\n\
+          \        output.append(f\"内容: {item['body']}\")\n        output.append('-'\
+          \ * 50)\n    \n    return {'result': '\\n'.join(output)}"
+        code_language: python3
+        desc: ''
+        outputs:
+          result:
+            children: null
+            type: string
+        selected: false
+        title: 处理json类型的搜索结果
+        type: code
+        variables:
+        - value_selector:
+          - '1724228514957'
+          - json
+          variable: arg1
+      height: 52
+      id: '1724230114999'
+      position:
+        x: 942
+        y: 258
+      positionAbsolute:
+        x: 942
+        y: 258
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    viewport:
+      x: 122.26944587077094
+      y: 192.32279961691918
+      zoom: 0.609385394307287
+  rag_pipeline_variables: []

@@ -1,0 +1,390 @@
+app:
+  description: 通过生成大纲，再生成具体内容的方式，实现上万字的超长文本输出
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: advanced-chat
+  name: 长文本写作
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/openai:0.2.6@e2665624a156f52160927bceac9e169bd7e5ae6b936ae82575e14c90af390e6e
+    version: null
+kind: app
+version: 0.4.0
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: llm
+      id: 1723797623551-source-1723797712476-target
+      source: '1723797623551'
+      sourceHandle: source
+      target: '1723797712476'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: parameter-extractor
+      id: 1723797712476-source-1723797766909-target
+      source: '1723797712476'
+      sourceHandle: source
+      target: '1723797766909'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: parameter-extractor
+        targetType: iteration
+      id: 1723797766909-source-1723797863853-target
+      source: '1723797766909'
+      sourceHandle: source
+      target: '1723797863853'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: true
+        iteration_id: '1723797863853'
+        sourceType: llm
+        targetType: answer
+      id: 1723797867185-source-1723798110060-target
+      source: '1723797867185'
+      sourceHandle: source
+      target: '1723798110060'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInIteration: true
+        isInLoop: false
+        iteration_id: '1723797863853'
+        sourceType: iteration-start
+        targetType: llm
+      id: 1723797863853start0-source-1723797867185-target
+      source: 1723797863853start0
+      sourceHandle: source
+      target: '1723797867185'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 开始
+        type: start
+        variables:
+        - label: title
+          max_length: 48
+          options: []
+          required: true
+          type: text-input
+          variable: title
+      height: 88
+      id: '1723797623551'
+      position:
+        x: -241.96858001507871
+        y: 310.89461615519934
+      positionAbsolute:
+        x: -241.96858001507871
+        y: 310.89461615519934
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1723797623551'
+          - title
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: gpt-4o
+          provider: langgenius/openai/openai
+        prompt_template:
+        - id: 80ad0e48-bd64-46a6-a3ab-f69dd4caf484
+          role: system
+          text: "# 角色\n\n你是一个专业的议论文写作高手，能够根据用户给定的写作范围，迅速生成清晰、有条理的议论文大纲，并以标准的 JSON\
+            \ 格式进行输出。\n## 技能\n### 技能 1: 理解写作范围\n1. 仔细分析用户输入的写作范围，明确核心主题和关键要点。\n2.\
+            \ 对于不明确或模糊的写作范围，与用户进一步沟通以获取更清晰的需求。\n### 技能 2: 构建大纲\n1. 围绕写作范围，确定合适的论点和论据。\n\
+            2. 设计合理的文章结构，包括引言、正文段落和结论。\n3. 按照以下 JSON 格式输出大纲：\n{\n  \"body_paragraphs\"\
+            : [\n  {\n      \"paragraph_title\": \"<引言>\",\n    },\n    {\n      \"\
+            paragraph_title\": \"<正文段落 1 标题>\",\n    },\n    {\n      \"paragraph_title\"\
+            : \"<正文段落 2 标题>\",\n    },\n  {\n      \"paragraph_title\": \"<结论>\",\n\
+            \    }\n  ],\n}\n## 限制\n- 仅围绕用户给定的写作范围进行大纲创作，不偏离主题。\n- 严格按照给定的 JSON 格式输出大纲，确保格式正确、内容完整。\n\
+            - 所生成的大纲内容应具有逻辑连贯性和说服力。"
+        - id: 2ad673f7-0e7f-405e-b59d-c9dda82ae9d6
+          role: user
+          text: '## title
+
+            {{#1723797623551.title#}}'
+        selected: false
+        title: LLM
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 88
+      id: '1723797712476'
+      position:
+        x: 80
+        y: 387.68024865972717
+      positionAbsolute:
+        x: 80
+        y: 387.68024865972717
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        desc: ''
+        instruction: "Example：{\n  \"body_paragraphs\": [\n  {\n      \"paragraph_title\"\
+          : \"<引言>\",\n    },\n    {\n      \"paragraph_title\": \"<正文段落 1 标题>\",\n\
+          \    },\n    {\n      \"paragraph_title\": \"<正文段落 2 标题>\",\n    },\n  {\n\
+          \      \"paragraph_title\": \"<结论>\",\n    }\n  ],\n}"
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: gpt-4o
+          provider: langgenius/openai/openai
+        parameters:
+        - description: 段落标题
+          name: paragraphs
+          required: true
+          type: array[object]
+        query:
+        - '1723797712476'
+        - text
+        reasoning_mode: prompt
+        selected: false
+        title: 参数提取器
+        type: parameter-extractor
+        variables: []
+      height: 88
+      id: '1723797766909'
+      position:
+        x: 340.67363003116924
+        y: 387.68024865972717
+      positionAbsolute:
+        x: 340.67363003116924
+        y: 387.68024865972717
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        desc: ''
+        error_handle_mode: terminated
+        height: 202
+        is_parallel: false
+        iterator_selector:
+        - '1723797766909'
+        - paragraphs
+        output_selector:
+        - '1723797867185'
+        - text
+        output_type: array[string]
+        parallel_nums: 10
+        selected: false
+        startNodeType: llm
+        start_node_id: 1723797863853start0
+        title: 迭代
+        type: iteration
+        width: 679
+      height: 202
+      id: '1723797863853'
+      position:
+        x: 604.6701322830082
+        y: 387.68024865972717
+      positionAbsolute:
+        x: 604.6701322830082
+        y: 387.68024865972717
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 679
+      zIndex: 1
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        isInIteration: true
+        isIterationStart: true
+        iteration_id: '1723797863853'
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: gpt-4o
+          provider: langgenius/openai/openai
+        prompt_template:
+        - id: c9e7c46a-2f99-4021-b79b-717ba94d7821
+          role: system
+          text: '# 角色
+
+            你是一位资深的议论文作家，擅长将给定的大纲或段落进行丰富和拓展，形成内容详实、逻辑严密的长篇文章。
+
+
+            ## 技能
+
+            ### 技能 1: 段落扩展
+
+            1. 仔细分析给定的段落，明确其核心观点和逻辑结构。
+
+            2. 围绕核心观点，运用丰富的论据、事例和论证方法进行扩展。
+
+            3. 保持语言准确、流畅，风格符合议论文的要求。
+
+            4. 注意段落之间的过渡和衔接，使文章整体连贯。
+
+
+            ## 限制
+
+            - 只围绕议论文的写作展开工作，不涉及其他文体。
+
+            - 严格按照议论文的格式和要求进行写作，包括提出论点、论证过程和得出结论。
+
+            - 所使用的论据和事例必须真实可靠，具有说服力。
+
+            - 注意语言规范，避免使用过于随意或口语化的表达。'
+        - id: c372aef9-f917-4ecc-aaba-8ca0d457863a
+          role: user
+          text: '## Paragraph  you need to extend
+
+            {{#1723797863853.item#}}'
+        selected: false
+        title: LLM 2
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      extent: parent
+      height: 88
+      id: '1723797867185'
+      parentId: '1723797863853'
+      position:
+        x: 117
+        y: 85
+      positionAbsolute:
+        x: 721.6701322830082
+        y: 472.68024865972717
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 1001
+    - data:
+        answer: '{{#1723797867185.text#}}'
+        desc: ''
+        isInIteration: true
+        iteration_id: '1723797863853'
+        selected: false
+        title: 直接回复
+        type: answer
+        variables: []
+      extent: parent
+      height: 103
+      id: '1723798110060'
+      parentId: '1723797863853'
+      position:
+        x: 420
+        y: 85
+      positionAbsolute:
+        x: 1024.6701322830081
+        y: 472.68024865972717
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 1002
+    - data:
+        desc: ''
+        isInIteration: true
+        selected: false
+        title: ''
+        type: iteration-start
+      draggable: false
+      height: 48
+      id: 1723797863853start0
+      parentId: '1723797863853'
+      position:
+        x: 24
+        y: 68
+      positionAbsolute:
+        x: 628.6701322830082
+        y: 455.68024865972717
+      selectable: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom-iteration-start
+      width: 44
+      zIndex: 1002
+    viewport:
+      x: 327.52118318252155
+      y: 72.39741110316118
+      zoom: 0.6326978607718579
+  rag_pipeline_variables: []
