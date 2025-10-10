@@ -1,0 +1,109 @@
+app:
+  description: ''
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: chat
+  name: 软件工程师面试客服
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/deepseek:0.0.6@dd589dc093c8084925858034ab5ec1fdf0d33819f43226c2f8c4a749a9acbbb2
+    version: null
+kind: app
+model_config:
+  agent_mode:
+    enabled: false
+    max_iteration: 10
+    strategy: function_call
+    tools: []
+  annotation_reply:
+    enabled: false
+  chat_prompt_config: {}
+  completion_prompt_config: {}
+  dataset_configs:
+    datasets:
+      datasets:
+      - dataset:
+          enabled: true
+          id: 8112ce0c-20db-4b08-9479-aeec2723f3e9
+    reranking_enable: true
+    retrieval_model: multiple
+    top_k: 4
+  dataset_query_variable: ''
+  external_data_tools: []
+  file_upload:
+    allowed_file_extensions:
+    - .JPG
+    - .JPEG
+    - .PNG
+    - .GIF
+    - .WEBP
+    - .SVG
+    - .MP4
+    - .MOV
+    - .MPEG
+    - .MPGA
+    allowed_file_types:
+    - image
+    - video
+    allowed_file_upload_methods:
+    - remote_url
+    - local_file
+    enabled: false
+    image:
+      detail: high
+      enabled: false
+      number_limits: 3
+      transfer_methods:
+      - remote_url
+      - local_file
+    number_limits: 3
+  model:
+    completion_params:
+      stop: []
+      temperature: 0.5
+    mode: chat
+    name: deepseek-chat
+    provider: langgenius/deepseek/deepseek
+  more_like_this:
+    enabled: false
+  opening_statement: ''
+  pre_prompt: '我想让你担任{{jobname}}面试官。我将成为候选人，您将向我询问{{jobname}}职位的而试题。
+
+    我希望你只作为面试官回答。不要一次写出所有的问题，我希望你只对我进行来访。问我问题，等待我的答.不要写解释。
+
+    像面试官一样一个一个问我，等我回答。
+
+    当我回准备好了后，开始提问。'
+  prompt_type: simple
+  retriever_resource:
+    enabled: true
+  sensitive_word_avoidance:
+    configs: []
+    enabled: false
+    type: ''
+  speech_to_text:
+    enabled: false
+  suggested_questions: []
+  suggested_questions_after_answer:
+    enabled: false
+  text_to_speech:
+    enabled: false
+    language: ''
+    voice: ''
+  user_input_form:
+  - text-input:
+      default: ''
+      label: 岗位名称
+      max_length: 48
+      required: true
+      variable: jobname
+  - text-input:
+      default: ''
+      label: 如何称呼您
+      max_length: 48
+      required: true
+      variable: name
+version: 0.4.0
