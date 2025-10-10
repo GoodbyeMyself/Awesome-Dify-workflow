@@ -1,0 +1,233 @@
+app:
+  description: 中译英程序员
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: workflow
+  name: 中译英程序员
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/deepseek:0.0.6@dd589dc093c8084925858034ab5ec1fdf0d33819f43226c2f8c4a749a9acbbb2
+    version: null
+kind: app
+version: 0.4.0
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: llm
+      id: 1721105947247-source-1721105983723-target
+      source: '1721105947247'
+      sourceHandle: source
+      target: '1721105983723'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 1721105983723-source-1721106030090-target
+      source: '1721105983723'
+      sourceHandle: source
+      target: '1721106030090'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 开始
+        type: start
+        variables:
+        - label: content
+          max_length: 50000
+          options: []
+          required: true
+          type: paragraph
+          variable: content
+      height: 88
+      id: '1721105947247'
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params:
+            temperature: 1.1
+          mode: chat
+          name: deepseek-chat
+          provider: langgenius/deepseek/deepseek
+        prompt_template:
+        - id: a1ebfcfc-b937-4842-b2e7-d861f0e257d8
+          role: system
+          text: '现在我要写一个将中文翻译成英文的GPT，请参照以下Prompt制作，注意都用英文生成：
+
+
+            ## 角色
+
+            你是一位web前端软件开发工程师，擅长写作高质量的开发文档。请你帮我准确地将以下中文翻译成英文，风格要符合程序员的表达习惯。
+
+
+            ## 规则：
+
+            - 输入格式为 Markdown 格式，输出格式也必须保留原始 Markdown 格式
+
+            - 以下是常见的相关术语词汇对应表（中文 -> English）：
+
+            * 零样本 -> Zero-shot
+
+            * 少样本 -> Few-shot
+
+
+            ## 策略：
+
+
+            分三步进行翻译工作，并打印每步的结果：
+
+            1. 根据中文内容直译成英文，保持原有格式，不要遗漏任何信息
+
+            2. 根据第一步直译的结果，指出其中存在的具体问题，要准确描述，不宜笼统的表示，也不需要增加原文不存在的内容或格式，包括不仅限于：
+
+            - 不符合英文表达习惯，明确指出不符合的地方
+
+            - 语句不通顺，指出位置，不需要给出修改意见，意译时修复
+
+            - 晦涩难懂，模棱两可，不易理解，可以尝试给出解释
+
+            3. 根据第一步直译的结果和第二步指出的问题，重新进行意译，保证内容的原意的基础上，使其更易于理解，更符合web前端软件开发工程师的表达习惯，同时保持原有的格式不变
+
+
+            ## 格式
+
+            返回格式如下，"{xxx}"表示占位符：
+
+
+            ### 直译
+
+            {直译结果}
+
+
+            ***
+
+
+            ###问题
+
+            {直译的具体问题列表}
+
+
+            ***
+
+
+            ###意译'
+        - id: e183e0ca-20f1-4d1a-aef0-726f0fd11698
+          role: user
+          text: '{{#1721105947247.content#}}'
+        selected: false
+        title: LLM
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 88
+      id: '1721105983723'
+      position:
+        x: 383
+        y: 282
+      positionAbsolute:
+        x: 383
+        y: 282
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        desc: ''
+        outputs:
+        - value_selector:
+          - '1721105983723'
+          - text
+          variable: output
+        selected: false
+        title: 结束
+        type: end
+      height: 88
+      id: '1721106030090'
+      position:
+        x: 688
+        y: 282
+      positionAbsolute:
+        x: 688
+        y: 282
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    viewport:
+      x: 82
+      y: 56.5
+      zoom: 1
+  rag_pipeline_variables: []
